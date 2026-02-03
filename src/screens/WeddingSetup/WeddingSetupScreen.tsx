@@ -3,13 +3,14 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'r
 import { colors } from '../../components/theme/colors';
 import PrimaryButton from '../../components/PrimaryButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import {useNavigation} from '@react-navigation/native';
 const WeddingSetupScreen: React.FC = () => {
 const [weddingDate, setWeddingDate] = useState<Date | null>(null);
 const [showDatePicker, setShowDatePicker] = useState(false);  const [city, setCity] = useState('');
   const [guests, setGuests] = useState('');
   const [budget, setBudget] = useState('');
 
+  const navigation = useNavigation<any>();
   const onChangeDate = (_event: any, selectedDate?: Date) => {
   setShowDatePicker(false);
   if (selectedDate) {
@@ -71,8 +72,13 @@ const [showDatePicker, setShowDatePicker] = useState(false);  const [city, setCi
         onChangeText={setBudget}
       />
 
-      <PrimaryButton title="Create My Plan" onPress={() => {}} />
-    </View>
+<PrimaryButton
+  title="Create My Plan"
+  onPress={() => {
+    // Later: validate + API call
+    navigation.navigate('Dashboard');
+  }}
+/>    </View>
   );
 };
 
