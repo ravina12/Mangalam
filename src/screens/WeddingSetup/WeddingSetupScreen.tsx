@@ -76,7 +76,7 @@ const [showDatePicker, setShowDatePicker] = useState(false);  const [city, setCi
   title="Create My Plan"
   onPress={() => {
     // Later: validate + API call
-    navigation.navigate('Dashboard');
+    navigation.replace('Main');
   }}
 />    </View>
   );

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../../components/theme/colors';
+import { useTasks } from '../../context/TasksContext';
 
 type Task = {
   id: string;
@@ -27,33 +28,40 @@ const initialTasks: Task[] = [
 ];
 
 const TasksScreen: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+const { tasks, addTask, toggleTask } = useTasks();
   const [modalVisible, setModalVisible] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const completed = tasks.filter(t => t.done).length;
 
-  const toggleTask = (id: string) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
-    );
-  };
+  // const toggleTask = (id: string) => {
+  //   setTasks(prev =>
+  //     prev.map(task =>
+  //       task.id === id ? { ...task, done: !task.done } : task
+  //     )
+  //   );
+  // };
 
-  const addTask = () => {
-    if (!newTaskTitle.trim()) return;
+  // const addTask = () => {
+  //   if (!newTaskTitle.trim()) return;
 
-    const newTask: Task = {
-      id: Date.now().toString(),
-      title: newTaskTitle.trim(),
-      done: false,
-    };
+  //   const newTask: Task = {
+  //     id: Date.now().toString(),
+  //     title: newTaskTitle.trim(),
+  //     done: false,
+  //   };
 
-    setTasks(prev => [newTask, ...prev]);
-    setNewTaskTitle('');
-    setModalVisible(false);
-  };
+  //   setTasks(prev => [newTask, ...prev]);
+  //   setNewTaskTitle('');
+  //   setModalVisible(false);
+  // };
+
+  const handleAddTask = () => {
+  if (!newTaskTitle.trim()) return;
+  addTask(newTaskTitle.trim());
+  setNewTaskTitle('');
+  setModalVisible(false);
+};
 
   const renderItem = ({ item }: { item: Task }) => {
     return (
@@ -140,7 +148,7 @@ const TasksScreen: React.FC = () => {
 
                 <TouchableOpacity
                   style={[styles.modalButton, styles.addButton]}
-                  onPress={addTask}
+                  onPress={handleAddTask}
                 >
                   <Text style={styles.addText}>Add</Text>
                 </TouchableOpacity>
