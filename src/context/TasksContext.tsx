@@ -10,6 +10,7 @@ type TasksContextType = {
   tasks: Task[];
   addTask: (title: string) => void;
   toggleTask: (id: string) => void;
+  addMultipleTasks: (titles: string[]) => void; // 👈 NEW
 };
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -33,16 +34,32 @@ export const TasksProvider = ({ children }: { children: ReactNode }) => {
     setTasks(prev => [newTask, ...prev]);
   };
 
+  const addMultipleTasks = (titles: string[]) => {
+    setTasks(prev => {
+      const existingTitles = prev.map(t => t.title.toLowerCase());
+
+      const newTasks: Task[] = titles
+        .filter(title => !existingTitles.includes(title.toLowerCase()))
+        .map(title => ({
+          id: Date.now().toString() + Math.random().toString(),
+          title,
+          done: false,
+        }));
+
+      return [...newTasks, ...prev];
+    });
+  };
+
   const toggleTask = (id: string) => {
     setTasks(prev =>
-      prev.map(task =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
+      prev.map(task => (task.id === id ? { ...task, done: !task.done } : task)),
     );
   };
 
   return (
-    <TasksContext.Provider value={{ tasks, addTask, toggleTask }}>
+    <TasksContext.Provider
+      value={{ tasks, addTask, toggleTask, addMultipleTasks }}
+    >
       {children}
     </TasksContext.Provider>
   );

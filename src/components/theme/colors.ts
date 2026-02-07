@@ -1,13 +1,13 @@
 export const colors = {
   background: '#FAFAFC',
 
-  primary: '#8B5CF6',        // violet
+  primary: '#8B5CF6', // violet
   primarySoft: '#EDE9FE',
 
-  secondary: '#38BDF8',      // soft blue
+  secondary: '#38BDF8', // soft blue
   secondarySoft: '#E0F2FE',
 
-  accent: '#F472B6',         // playful pink 💖
+  accent: '#F472B6', // playful pink 💖
   accentSoft: '#FCE7F3',
 
   textPrimary: '#111827',
@@ -19,4 +19,5 @@ export const colors = {
   success: '#10B981',
   warning: '#F59E0B',
   danger: '#EF4444',
+  error: '#DC2626',
 };

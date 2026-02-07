@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTasks } from '../../context/TasksContext';
 import { useWedding } from '../../context/WeddingContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { TASK_TEMPLATES } from '../../data/taskTemplates';
 
 const DashboardScreen: React.FC = () => {
   // Mock data for now
@@ -27,7 +28,7 @@ const DashboardScreen: React.FC = () => {
   //   'Shortlist decor',
   // ];
 
-  const { tasks } = useTasks();
+  const { tasks, addMultipleTasks } = useTasks();
 
   const total = tasks.length;
   const completed = tasks.filter(t => t.done).length;
@@ -64,6 +65,14 @@ const DashboardScreen: React.FC = () => {
     }
   }
 
+  let phaseKey: 'early' | 'mid' | 'final' | null = null;
+
+  if (monthsLeft !== null) {
+    if (monthsLeft > 6) phaseKey = 'early';
+    else if (monthsLeft > 3) phaseKey = 'mid';
+    else phaseKey = 'final';
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar
@@ -74,6 +83,11 @@ const DashboardScreen: React.FC = () => {
         <ScrollView contentContainerStyle={styles.container}>
           <Text style={styles.title}>Your Wedding Plan</Text>
           <Text style={styles.subtitle}>Everything is under control 🌿</Text>
+          {monthsLeft !== null && (
+            <View style={styles.phaseBadge}>
+              <Text style={styles.phaseBadgeText}>{phase}</Text>
+            </View>
+          )}
 
           {/* Days + Progress Row */}
           <View style={styles.row}>
@@ -141,6 +155,19 @@ const DashboardScreen: React.FC = () => {
             <Text style={styles.cardTitle}>Your Planning Phase</Text>
             <Text style={styles.phaseTitle}>{phase}</Text>
             <Text style={styles.cardHint}>{phaseHint}</Text>
+            {phaseKey && (
+              <TouchableOpacity
+                style={styles.generateButton}
+                onPress={() => {
+                  addMultipleTasks(TASK_TEMPLATES[phaseKey]);
+                  navigation.navigate('Tasks');
+                }}
+              >
+                <Text style={styles.generateButtonText}>
+                  Generate tasks for this phase
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Focus Tasks */}
@@ -163,6 +190,21 @@ const DashboardScreen: React.FC = () => {
             <Text style={styles.budgetStatus}>{budgetStatus}</Text>
             <Text style={styles.cardHint}>No action needed right now</Text>
           </View>
+
+          <TouchableOpacity
+            style={styles.ctaButton}
+            onPress={() => {
+              if (!weddingDate) {
+                setShowPicker(true);
+              } else {
+                navigation.navigate('Tasks');
+              }
+            }}
+          >
+            <Text style={styles.ctaButtonText}>
+              {weddingDate ? 'View Tasks' : 'Set Wedding Date'}
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -256,5 +298,43 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.primary,
     marginBottom: 4,
+  },
+  generateButton: {
+    marginTop: 12,
+    backgroundColor: colors.primary,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  generateButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+  phaseBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginBottom: 16,
+  },
+  phaseBadgeText: {
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 13,
+  },
+
+  ctaButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  ctaButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

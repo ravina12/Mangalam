@@ -5,7 +5,7 @@ import PrimaryButton from '../../components/PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
 
 const SignupScreen: React.FC = () => {
-    const navigation = useNavigation<any>();
+  const navigation = useNavigation<any>();
 
   return (
     <View style={styles.container}>
@@ -29,14 +29,17 @@ const SignupScreen: React.FC = () => {
         secureTextEntry
       />
 
-      <PrimaryButton title="Sign Up"  onPress={() => navigation.navigate('WeddingSetup')} />
+      <PrimaryButton
+        title="Sign Up"
+        onPress={() => navigation.navigate('WeddingSetup')}
+      />
 
       <Text style={styles.footerText}>
-  Already have an account?{' '}
-  <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-    Login
-  </Text>
-</Text>
+        Already have an account?{' '}
+        <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+          Login
+        </Text>
+      </Text>
     </View>
   );
 };
